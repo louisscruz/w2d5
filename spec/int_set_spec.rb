@@ -1,69 +1,72 @@
 require "spec_helper"
 
 describe IntSet do
-  subject(:int_set) { IntSet.new(4) }
+  subject(:int_set) { IntSet.new(20) }
 
   describe "#initialize" do
     it "should set a max" do
-      expect(max_int_set.max).to eq(4)
+      expect(int_set.size).to eq(20)
     end
 
     it "should initialize the store to the max length" do
-      expect(max_int_set.store.length).to eq(20)
+      expect(int_set.store.length).to eq(20)
     end
 
-    xit "should initialize all the store to false" do
-      expect(max_int_set.store.all? { |el| el == false}).to eq(true)
+    it "should initialize all the store to empty arrays" do
+      expect(int_set.store.all? { |el| el == [] }).to eq(true)
+    end
+  end
+
+  describe "#[]" do
+    it "returns the correct array" do
+      expect(int_set[0]).to eq([])
     end
   end
 
   describe "#insert" do
-    xit "returns the store" do
-      expect(max_int_set.insert(1)).to eq(max_int_set.store)
+    it "returns the store" do
+      expect(int_set.insert(1)).to eq(int_set.store)
     end
 
-    xit "sets the proper value to exist in the store" do
-      max_int_set.insert(1)
-      expect(max_int_set.store[1]).to eq(true)
+    it "sets the proper value to exist in the store" do
+      int_set.insert(21)
+      expect(int_set.store[1]).to include(21)
     end
 
-    xit "raises an error if attempt to add outside of range" do
-      expect { max_int_set.insert(5) }.to raise_error("invalid input")
+    it "is able to store an arbitray number of numbers" do
+      (0..39).each { |i| int_set.insert(i) }
+      expect(int_set.store.all? { |arr| arr.length == 2 }).to eq(true)
+    end
+
+    it "is able to store negative numbers" do
+      int_set.insert(-21)
+      expect(int_set.store[19]).to include(-21)
     end
   end
 
   describe "#remove" do
-    # before(:each) do
-    #   max_int_set.insert(1)
-    # end
-
-    xit "returns the store" do
-      expect(max_int_set.remove(1)).to eq(max_int_set.store)
+    before(:each) do
+     int_set.insert(1)
     end
 
-    xit "removes the value from the store" do
-      max_int_set.remove(1)
-      expect(max_int_set.store.all? { |el| el == false }).to eq(true)
+    it "returns the store" do
+      expect(int_set.remove(1)).to eq(int_set.store)
     end
 
-    xit "raises an error if trying to remove element outside of range" do
-      expect { max_int_set.remove(-1) }.to raise_error("invalid input")
+    it "removes the value from the store" do
+      int_set.remove(1)
+      expect(int_set.store.none? { |arr| arr.include?(1) }).to eq(true)
     end
   end
 
   describe "#include?" do
     before(:each) do
-      max_int_set.insert(1)
+      int_set.insert(1)
     end
 
     it "returns whether or not the store includes the number" do
-      expect(max_int_set.include?(1)).to eq(true)
-      expect(max_int_set.include?(0)).to eq(false)
+      expect(int_set.include?(1)).to eq(true)
+      expect(int_set.include?(0)).to eq(false)
     end
-
-    it "raises an error if trying to remove element outside of range" do
-      expect { max_int_set.include?(-1) }.to raise_error("invalid input")
-    end
-
   end
 end
