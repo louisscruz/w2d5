@@ -1,2 +1,3 @@
-require "max_int_set"
-require "int_set"
+def new_link
+	Link.new 
+end
